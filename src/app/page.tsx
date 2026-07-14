@@ -15,7 +15,7 @@ interface WPPost {
 
 async function getLatestPosts(): Promise<WPPost[]> {
   try {
-    const res = await fetch('https://moitruonghtc.com/wp-json/wp/v2/posts?_embed&per_page=3', {
+    const res = await fetch('https://api.moitruonghtc.com/wp-json/wp/v2/posts?_embed&per_page=3', {
       next: { revalidate: 60 }
     });
     if (!res.ok) return [];
