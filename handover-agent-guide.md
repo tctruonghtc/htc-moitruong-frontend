@@ -10,6 +10,7 @@ Dự án đã được chuyển đổi từ WordPress truyền thống sang mô 
 
 *   **Frontend (Giao diện người dùng)**: 
     *   **Công nghệ**: Next.js (App Router), TypeScript, TailwindCSS v4, React.
+    *   **AI Chat**: Sử dụng Vercel AI SDK v3 (`ai@3.4.15`) kết hợp với VietAPI (`@ai-sdk/openai`).
     *   **Máy chủ**: Vercel.
     *   **Tên miền chính**: `https://moitruonghtc.com`
     *   **Thư mục làm việc cục bộ**: Tại chính thư mục chứa file tài liệu này (đây là thư mục gốc của dự án).
@@ -17,26 +18,22 @@ Dự án đã được chuyển đổi từ WordPress truyền thống sang mô 
 
 *   **Backend (Hệ thống Quản trị Nội dung)**:
     *   **Công nghệ**: WordPress chạy trên cPanel (Hosting AZDIGI).
-    *   **Tên miền quản trị & API**: `https://api.moitruonghtc.com` (Đã cấu hình lại trong Database).
-    *   **Mục đích**: Người dùng sẽ viết bài, đăng ảnh tại `api.moitruonghtc.com/wp-admin`. Hệ thống này chỉ làm nhiệm vụ cung cấp dữ liệu qua API, không xử lý giao diện hiển thị cho khách hàng.
+    *   **Tên miền quản trị & API**: `https://api.moitruonghtc.com`
+    *   **Mục đích**: Người dùng sẽ viết bài, đăng ảnh tại `api.moitruonghtc.com/wp-admin`. Hệ thống này chỉ làm nhiệm vụ cung cấp dữ liệu qua API.
 
 *   **Luồng dữ liệu (Data Fetching)**: 
-    *   Frontend gọi dữ liệu qua REST API chuẩn của WordPress. 
-    *   Ví dụ API Endpoint: `https://api.moitruonghtc.com/wp-json/wp/v2/posts`
+    *   Frontend gọi dữ liệu qua REST API chuẩn của WordPress (`/wp-json/wp/v2/`).
 
 ---
 
-## 2. Thông tin Kết nối Máy chủ (Backend AZDIGI)
-Bạn có toàn quyền truy cập SSH vào máy chủ AZDIGI để chạy các lệnh quản lý WordPress (`wp-cli`) nếu cần:
-*   **Server**: `ghf56-22143.azdigihost.com`
-*   **Port**: `2210`
-*   **User**: `setmvcsl`
-*   **Thư mục gốc của WordPress**: `public_html`
-*   **Xác thực SSH**: Sử dụng khóa Public Key. *Lưu ý quan trọng cho máy tính mới: Nếu bạn làm việc trên một máy tính khác, máy tính đó phải được copy file khóa riêng tư (`id_ed25519`) từ máy tính cũ sang. Nếu không, AI Agent hãy yêu cầu người dùng cung cấp mật khẩu cPanel để tự động tạo và add một SSH Key mới.*
-*   **Lệnh mẫu để kiểm tra trạng thái WP**: 
-    ```bash
-    ssh -p 2210 setmvcsl@ghf56-22143.azdigihost.com "cd public_html && wp info"
-    ```
+## 2. Thông tin Kết nối Máy chủ & API
+*   **SSH AZDIGI**:
+    *   **Server**: `ghf56-22143.azdigihost.com` | **Port**: `2210` | **User**: `setmvcsl`
+    *   **Lệnh mẫu**: `ssh -p 2210 setmvcsl@ghf56-22143.azdigihost.com "cd public_html && wp info"`
+*   **VietAPI (AI Assistant)**:
+    *   Hệ thống sử dụng VietAPI thay thế OpenAI/Gemini. 
+    *   Model hiện tại: `deepseek-v4-pro` (Thiết lập tại `src/app/api/chat/route.ts`).
+    *   Biến môi trường cần thiết: `VIETAPI_KEY` (Thiết lập trong `.env.local` hoặc trên Vercel Dashboard).
 
 ---
 
@@ -49,13 +46,15 @@ Bạn **BẮT BUỘC** phải tuân thủ các quy tắc sau (Đã ghi trong `AG
     $env:BU_CDP_URL="http://127.0.0.1:61920"; cmd.exe /c "type script.py | browser-harness"
     ```
 3.  **Hệ thống Tolaria Wiki**: Cập nhật mọi thay đổi cấu trúc, logic hoặc feature mới vào các file markdown tương ứng và ghi lại lịch sử vào file `log.md`.
+4.  **Vercel AI SDK**: Hiện tại Frontend đang bị "khóa" (lock) ở phiên bản `ai@3.4.15` và `@ai-sdk/react@0.x` vì phiên bản mới nhất gây ra lỗi component. TUYỆT ĐỐI KHÔNG tự ý update thư viện `ai` lên v4+ nếu không có sự đồng ý của User.
 
 ---
 
 ## 4. Kế hoạch & Nhiệm vụ tiếp theo (Dành cho Bạn)
-Dự án mới hoàn thiện phần Trang chủ (hiển thị danh sách tin tức). Các tác vụ bạn cần phát triển tiếp:
-*   **Dynamic Routing (Trang chi tiết bài viết)**: Tạo route `src/app/news/[slug]/page.tsx` để render nội dung chi tiết của một bài viết khi người dùng click vào từ trang chủ.
-*   **Tạo Trang tĩnh**: Xây dựng UI cho các trang Dịch vụ (Hồ sơ môi trường, Nước ngầm...), Trang Giới thiệu và Trang Liên hệ.
-*   **SEO Metadata**: Thiết lập `generateMetadata` của Next.js cho tất cả các trang dựa trên dữ liệu lấy từ WordPress API để đảm bảo điểm SEO tuyệt đối.
+Dự án đã hoàn thiện Trang chủ, Dynamic Routing bài viết chi tiết, và Widget AI Chat. Các tác vụ bạn cần phát triển tiếp:
+*   **Tạo Trang tĩnh**: Xây dựng UI cho các trang Dịch vụ (Hồ sơ môi trường, Nước ngầm...), Trang Giới thiệu và Trang Liên hệ theo giao diện chuyên nghiệp.
+*   **Giao diện Mobile**: Kiểm tra và tinh chỉnh lại độ tương thích trên thiết bị di động (Responsive).
+*   **Cải tiến RAG cho AI (Tùy chọn)**: Đọc file System Prompt (`src/lib/prompt.ts`) và nghiên cứu cách đưa thêm tài liệu pháp lý chuyên sâu về môi trường để AI tư vấn luật chính xác hơn.
+*   **SEO Metadata**: Hoàn thiện các thẻ SEO, OpenGraph cho các trang tĩnh.
 
-*Ký tên: AI Agent tiền nhiệm (Thực hiện ngày 14/07/2026).*
+*Ký tên: AI Agent tiền nhiệm (Thực hiện ngày 15/07/2026).*
