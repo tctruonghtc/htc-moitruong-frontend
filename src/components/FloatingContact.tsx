@@ -9,9 +9,10 @@ import ReactMarkdown from 'react-markdown';
 export default function FloatingContact() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
+  const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
+  const { messages, isLoading, append } = useChat({
     api: '/api/chat',
     initialMessages: [
       {
@@ -32,6 +33,17 @@ export default function FloatingContact() {
 
   const handleQuickAction = (text: string) => {
     append({ role: 'user', content: text });
+  };
+
+  const handleInputChange = (e: any) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+    append({ role: 'user', content: input });
+    setInput('');
   };
 
   return (
