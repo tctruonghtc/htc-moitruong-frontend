@@ -16,9 +16,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const svc = services.find((s) => s.slug === slug);
-  if (!svc) return { title: "Dịch vụ | HTC Môi Trường" };
+  if (!svc) return { title: "Dịch vụ" };
   return {
-    title: `${svc.title} | HTC Môi Trường`,
+    title: svc.title,
     description: svc.short,
     openGraph: {
       title: `${svc.title} | HTC Môi Trường`,

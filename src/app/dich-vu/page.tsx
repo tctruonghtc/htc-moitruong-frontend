@@ -7,7 +7,7 @@ import PageHero from "@/components/PageHero";
 import { services, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Dịch vụ | HTC Môi Trường",
+  title: "Dịch vụ",
   description:
     "Dịch vụ hồ sơ môi trường, tài nguyên nước & địa chất, thiết kế – thi công công trình BVMT từ HTC.",
   openGraph: {
