@@ -3,16 +3,15 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Phone, Bot, X, Send, Loader2 } from 'lucide-react';
-import { useChat } from '@ai-sdk/react';
+import { useChat } from 'ai/react';
 import ReactMarkdown from 'react-markdown';
 
 export default function FloatingContact() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
-  const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  const { messages, isLoading, append } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
     api: '/api/chat',
     initialMessages: [
       {
@@ -33,17 +32,6 @@ export default function FloatingContact() {
 
   const handleQuickAction = (text: string) => {
     append({ role: 'user', content: text });
-  };
-
-  const handleInputChange = (e: any) => {
-    setInput(e.target.value);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
-    append({ role: 'user', content: input });
-    setInput('');
   };
 
   return (
@@ -126,7 +114,9 @@ export default function FloatingContact() {
                     : 'bg-white border border-slate-100 text-slate-700 rounded-tl-sm'
                 }`}>
                   {m.role === 'assistant' ? (
-                    <ReactMarkdown className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0">{m.content}</ReactMarkdown>
+                    <div className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0 break-words">
+                      <ReactMarkdown>{m.content}</ReactMarkdown>
+                    </div>
                   ) : (
                     m.content
                   )}
