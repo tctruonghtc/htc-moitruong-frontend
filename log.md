@@ -52,3 +52,18 @@ Format: `## [YYYY-MM-DD] <action> | <title>`
 - Cập nhật DNS Cloudflare thành công: Trỏ `moitruonghtc.com` sang Vercel và `api.moitruonghtc.com` về AZDIGI.
 - Thực hiện Database Search & Replace trên AZDIGI qua SSH để đổi URL WordPress sang `api.moitruonghtc.com` thành công (246 replacements).
 - Cập nhật frontend Next.js trỏ endpoint API về `https://api.moitruonghtc.com/wp-json/` và hoàn tất quá trình go live.
+
+## [2026-07-15] handover | Agent succession
+
+- Thêm `handover-agent-guide.md` (kiến trúc Headless, SSH, ràng buộc browser-harness, lock AI SDK).
+
+## [2026-07-15] dev | Static pages + shell + SEO
+
+- Clone repo local: `/Users/phuongthao/Projects/htc-moitruong-frontend`.
+- Component: `Header` (mobile nav), `Footer`, `PageHero`; config `src/lib/site.ts`.
+- Routes: `/gioi-thieu`, `/lien-he`, `/dich-vu`, `/dich-vu/[slug]` (3 dịch vụ SSG).
+- Homepage / news: dùng Header-Footer chung; CTA link thật.
+- SEO: metadata root + OG, `robots.ts`, `sitemap.ts`, `next.config` remotePatterns.
+- AI: pin `ai@3.4.15`, gỡ deps `@ai-sdk/react`/`@ai-sdk/google` top-level; sửa `VIETAPI_KEY` + copy widget; `.env.example`.
+- Verify: `npm run build` thành công (13 routes).
+- Docs: `feature-static-pages-shell.md`, session summary.

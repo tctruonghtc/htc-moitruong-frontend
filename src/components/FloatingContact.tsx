@@ -169,7 +169,7 @@ export default function FloatingContact() {
               </button>
             </div>
             <div className="text-center mt-2">
-              <span className="text-[10px] text-slate-400">Powered by Gemini AI</span>
+              <span className="text-[10px] text-slate-400">Powered by HTC AI · VietAPI</span>
             </div>
           </form>
         </div>

@@ -8,28 +8,30 @@
 
 | Page | Summary | Status |
 |------|---------|--------|
-| [[concept-headless-wordpress]] | Quyết định sử dụng Next.js làm Frontend, WP làm Headless CMS | Active |
-| [[handover-agent-guide]] | Tài liệu bàn giao dự án toàn diện cho AI Agent mới | Active |
+| [[concept-headless-wordpress]] | Next.js FE + WP Headless CMS | Active |
+| [[handover-agent-guide]] | Tài liệu bàn giao AI Agent | Active |
 
 ## Entities & Dependencies
 
 | Page | Summary | Status |
 |------|---------|--------|
-| [[entity-moitruonghtc]] | Trang web chính (WordPress) của Môi trường HTC | Active |
+| [[entity-moitruonghtc]] | Thông tin công ty & dịch vụ | Active |
 
 ## Features & Tasks
 
 | Page | Summary | Status |
 |------|---------|--------|
+| [[feature-static-pages-shell]] | Header/Footer mobile, trang tĩnh DV/GT/LH, SEO, dọn AI SDK | Active |
 
 ## Session Summaries
 
 | Page | Date | Summary |
 |------|------|---------|
+| [[session-summary-2026-07-15-static-pages]] | 2026-07-15 | Clone audit + static pages + SEO shell |
 
 ---
 
 ## Stats
 
-- **Total wiki pages:** 0
-- **Last updated:** 2026-07-14
+- **Total wiki pages:** 5
+- **Last updated:** 2026-07-15

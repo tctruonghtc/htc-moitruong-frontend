@@ -1,0 +1,183 @@
+CHECKLIST THÔNG TIN — Website moitruonghtc.com
+Dành cho: anh Trường (HTC)
+Từ: Thanh Phong (AI Agent)
+Ngày: 2026-07-15
+Mục đích: chốt hạ tầng + quyền truy cập để em vận hành / deploy an toàn
+
+================================================================================
+A. BẮT BUỘC NẾU MUỐN EM COMMIT + ĐẨY CODE LÊN WEB
+================================================================================
+
+1) Git identity (commit local)
+   - Tên hiển thị git: .................................
+   - Email git (gắn GitHub): ............................
+     (remote hiện dùng: congtruongenvi@gmail.com)
+
+2) GitHub — quyền push repo tctruonghtc/htc-moitruong-frontend
+   Chọn 1 cách:
+   [ ] PAT (Personal Access Token, quyền repo)
+   [ ] SSH (em tạo key → anh add public key vào GitHub)
+   [ ] Anh login giúp trên máy (gh auth login / browser)
+
+   - User GitHub có quyền write: ........................
+   - Branch main có protect / bắt PR không?: ............
+   - Deploy policy:
+     [ ] Push main = production OK
+     [ ] Phải nhánh preview / PR trước
+
+3) Vercel
+   - Auto deploy khi push main: [ ] Có  [ ] Không  [ ] Không rõ
+   - Project name: ......................................
+   - Account email Vercel: ..............................
+   - VIETAPI_KEY đã set trên Vercel: [ ] Có  [ ] Không  [ ] Không rõ
+   - Vercel token (nếu cần CLI): ........................ (tuỳ chọn)
+
+================================================================================
+B. BẮT BUỘC NẾU MUỐN EM ĐỤNG WORDPRESS / HOSTING AZDIGI
+================================================================================
+
+4) SSH AZDIGI
+   Theo handover (cần xác nhận còn đúng):
+   - Host: ghf56-22143.azdigihost.com
+   - Port: 2210
+   - User: setmvcsl
+   - Host/user/port OK?: [ ] Có  [ ] Không (ghi lại nếu khác)
+
+   Cách cấp quyền (chọn 1):
+   [ ] Gửi/private key đã authorize cPanel
+   [ ] Cho em tạo key mới → anh authorize public key trên cPanel
+   [ ] Lúc này chưa cần SSH
+
+   - Thư mục WP: [ ] public_html  [ ] Khác: ...............
+
+5) WordPress admin (api.moitruonghtc.com/wp-admin)
+   - Username: ..........................................
+   - Password hoặc Application Password: ................
+   - Được phép sửa CMS?: [ ] Có  [ ] Không
+
+================================================================================
+C. NÊN CÓ NẾU MUỐN EM QUẢN DNS / MAIL CLOUDFLARE
+================================================================================
+
+6) Cloudflare (zone moitruonghtc.com)
+   - Em được sửa DNS?: [ ] Có  [ ] Không (anh tự giữ)
+   - API Token / ghi chú: ...............................
+   - Email @moitruonghtc.com có không?: .................
+   - MX Cloudflare forward về email nào?: ...............
+
+================================================================================
+D. NỘI DUNG & CHÍNH SÁCH SITE (KHÔNG PHẢI MẬT KHẨU)
+================================================================================
+
+7) Thông tin công ty chốt trên web
+   - Tên pháp lý OK?: Công ty TNHH Tài nguyên và Môi trường HTC
+     [ ] Đúng  [ ] Sửa: .................................
+   - Hotline/Zalo 0965.151.040: [ ] Đúng  [ ] Sửa: ......
+   - Địa chỉ: Số 842/31/2/3 Nguyễn Thị Minh Khai,
+     P. Tân Đông Hiệp, TP. Hồ Chí Minh
+     [ ] Đúng  [ ] Sửa: .................................
+   - Email liên hệ công khai (nếu có): ..................
+   - Giờ làm việc hiển thị: .............................
+
+8) Domain & API
+   - Canonical URL:
+     [ ] Giữ www (hiện apex 308 → www)
+     [ ] Chuyển về apex (moitruonghtc.com)
+   - api.moitruonghtc.com:
+     [ ] Chỉ CMS/API — nên noindex
+     [ ] Vẫn cho khách vào theme WP cũ
+     [ ] Khác: ..........................................
+
+9) Chức năng
+   - Shop / SureCart trên WP: [ ] Còn dùng  [ ] Bỏ  [ ] Để im
+   - Form liên hệ:
+     [ ] Chỉ gọi + Zalo
+     [ ] Form gửi mail/DB
+     [ ] Khác: ..........................................
+   - AI chat: [ ] Giữ  [ ] Tắt  [ ] Sửa model/key: ......
+
+10) Quy trình
+   - Ai duyệt nội dung trước public?: ...................
+   - Logo/ảnh chính thức (link Drive?): .................
+
+================================================================================
+E. TỐI THIỂU CHỈ 5 DÒNG — NẾU CHỈ DEPLOY FRONTEND TRƯỚC
+================================================================================
+
+1. Git name + email:
+2. Cách push GitHub (PAT / SSH / anh login):
+3. Push main = production OK? (Có/Không):
+4. VIETAPI_KEY đã có trên Vercel? (Có/Không/Không rõ):
+5. Hotline + địa chỉ chốt đúng? (Có/Sửa):
+
+SSH / WP admin / Cloudflare KHÔNG cần nếu chỉ deploy Next.js FE.
+
+================================================================================
+F. HIỆN TRẠNG MÁY EM (ĐÃ PROBE — KHÔNG CẦN ANH XÁC NHẬN LẠI PHẦN NÀY)
+================================================================================
+
+ĐÃ CÓ / HOẠT ĐỘNG:
+- DNS Cloudflare NS: arturo / faye.ns.cloudflare.com
+- Apex moitruonghtc.com → A 76.76.21.21 (Vercel) → 308 → www
+- www → CNAME cname.vercel-dns.com → Next.js trên Vercel (200)
+- api → Cloudflare proxy → AZDIGI LiteSpeed PHP 8.2 + WordPress
+- WP REST public: https://api.moitruonghtc.com/wp-json/wp/v2/ (OK)
+- WP siteurl/home: https://api.moitruonghtc.com
+- Posts: 6 | Pages: 18 | Theme: Astra + Elementor + plugin stack
+- Repo: github.com/tctruonghtc/htc-moitruong-frontend (public clone OK)
+- Local code + build OK tại: ~/Projects/htc-moitruong-frontend
+- Code trang tĩnh mới CHƯA push → production vẫn bản cũ
+
+CHƯA CÓ TRÊN MÁY EM:
+- git user.name / user.email (trống)
+- GitHub push (không PAT, không SSH, không gh)
+- Thư mục ~/.ssh (không có)
+- Vercel CLI / login
+- SSH AZDIGI (Permission denied publickey)
+- Cloudflare API token
+- WP admin / VietAPI key local
+
+================================================================================
+G. MẪU TRẢ LỜI NGẮN (COPY ĐIỀN)
+================================================================================
+
+[GIT]
+name:
+email:
+github_user_write:
+push_method: PAT | SSH | anh_login_giup
+main_protected: co/khong
+deploy_policy: push_main | branch_preview
+
+[VERCEL]
+auto_deploy_main: co/khong
+project_name:
+account_email:
+VIETAPI_KEY_on_vercel: co/khong
+
+[AZDIGI_SSH]
+host_ok: co/khong
+access: key_cu | tao_key_moi | khong_can_ssh_luc_nay
+wp_path: public_html
+
+[WORDPRESS]
+admin_user:
+can_edit_cms: co/khong
+
+[CLOUDFLARE]
+em_duoc_sua_dns: co/khong
+email_forward:
+
+[NOI_DUNG]
+hotline_ok:
+dia_chi_ok:
+email_public:
+canonical: www | apex
+api_public_index: noindex | de_nguyen
+shop_surecart: dung | bo | de_im
+form_lien_he: phone_zalo | form_mail | khac
+
+--------------------------------------------------------------------------------
+BẢO MẬT: mật khẩu / PAT / private key gửi kênh riêng, không forward group.
+Anh có thể tự dán credential vào GitHub/Vercel/cPanel rồi chỉ báo em "xong".
+--------------------------------------------------------------------------------
