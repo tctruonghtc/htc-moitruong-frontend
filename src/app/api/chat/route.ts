@@ -1,7 +1,13 @@
 // @ts-nocheck
-import { google } from '@ai-sdk/google';
+import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { systemPrompt } from '@/lib/prompt';
+
+// Khởi tạo custom provider kết nối đến VietAPI
+const vietapi = createOpenAI({
+  baseURL: 'https://api.vietapi.tech/v1',
+  apiKey: process.env.VIETAPI_KEY || '', // Nhớ thêm VIETAPI_KEY vào .env.local và Vercel Dashboard
+});
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -11,7 +17,7 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = await streamText({
-      model: google('gemini-1.5-flash'),
+      model: vietapi('gpt'), // Hoặc dùng 'opus', 'v4pro', 'claude-sonnet-5' tuỳ ý theo document của VietAPI
       system: systemPrompt,
       messages,
     });
