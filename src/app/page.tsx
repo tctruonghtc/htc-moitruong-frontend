@@ -1,7 +1,9 @@
 import { ArrowRight, Leaf, Droplets, Map, ShieldCheck, ChevronRight, Calendar } from "lucide-react";
+import Link from "next/link";
 
 interface WPPost {
   id: number;
+  slug: string;
   title: { rendered: string };
   excerpt: { rendered: string };
   link: string;
@@ -180,9 +182,9 @@ export default async function Home() {
                       <h4 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-brand-600 transition-colors" dangerouslySetInnerHTML={{ __html: post.title.rendered }}></h4>
                       <div className="text-slate-600 mb-6 line-clamp-3 leading-relaxed text-sm" dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}></div>
                       <div className="mt-auto pt-4 border-t border-slate-200">
-                        <a href={post.link} className="inline-flex items-center text-brand-600 font-semibold group-hover:text-brand-700">
+                        <Link href={`/news/${post.slug}`} className="inline-flex items-center text-brand-600 font-semibold group-hover:text-brand-700">
                           Đọc tiếp <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </article>

@@ -27,3 +27,35 @@
 body {
   overflow-x: hidden;
 }
+
+/* WordPress Content Styling */
+.wp-content p {
+  @apply mb-6;
+}
+.wp-content h2 {
+  @apply text-3xl font-bold text-brand-800 mt-10 mb-4;
+}
+.wp-content h3 {
+  @apply text-2xl font-bold text-slate-800 mt-8 mb-4;
+}
+.wp-content ul {
+  @apply list-disc pl-6 mb-6;
+}
+.wp-content ol {
+  @apply list-decimal pl-6 mb-6;
+}
+.wp-content li {
+  @apply mb-2;
+}
+.wp-content a {
+  @apply text-brand-600 hover:text-brand-700 underline underline-offset-2;
+}
+.wp-content img {
+  @apply rounded-2xl mx-auto my-8 shadow-sm h-auto max-w-full;
+}
+.wp-content figure {
+  @apply my-8;
+}
+.wp-content figcaption {
+  @apply text-center text-sm text-slate-500 mt-2;
+}
