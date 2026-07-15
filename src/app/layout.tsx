@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import FloatingContact from "@/components/FloatingContact";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="vi" className="scroll-smooth">
       <body className={`${outfit.className} bg-slate-50 text-slate-900 antialiased`}>
         {children}
+        <FloatingContact />
       </body>
     </html>
   );
