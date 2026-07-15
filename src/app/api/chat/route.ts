@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = await streamText({
-      model: vietapi('gpt'), // Hoặc dùng 'opus', 'v4pro', 'claude-sonnet-5' tuỳ ý theo document của VietAPI
+      model: vietapi('deepseek-v4-pro'), // Đã đổi sang DeepSeek v4 Pro
       system: systemPrompt,
       messages,
     });
