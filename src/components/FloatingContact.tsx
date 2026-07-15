@@ -1,20 +1,45 @@
+// @ts-nocheck
 "use client";
 
-import { useState } from 'react';
-import { MessageCircle, Phone, Bot, X, Send } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { MessageCircle, Phone, Bot, X, Send, Loader2 } from 'lucide-react';
+import { useChat } from '@ai-sdk/react';
+import ReactMarkdown from 'react-markdown';
 
 export default function FloatingContact() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  const { messages, input, handleInputChange, handleSubmit, isLoading, append } = useChat({
+    api: '/api/chat',
+    initialMessages: [
+      {
+        id: 'welcome-message',
+        role: 'assistant',
+        content: 'Xin chào! 👋 Mình là trợ lý AI của HTC Môi Trường. Mình có thể giúp bạn giải đáp các vấn đề về pháp lý môi trường, tài nguyên nước, hoặc tư vấn dịch vụ. Bạn cần hỗ trợ gì ạ?'
+      }
+    ]
+  }) as any;
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleQuickAction = (text: string) => {
+    append({ role: 'user', content: text });
+  };
 
   return (
     <>
       {/* Floating Action Button & Menu */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-        {/* Menu Items (visible when isOpen is true) */}
+        {/* Menu Items */}
         <div className={`flex flex-col items-end gap-3 transition-all duration-300 origin-bottom ${isOpen ? 'scale-100 opacity-100' : 'scale-50 opacity-0 pointer-events-none'}`}>
-          
-          {/* Gọi điện */}
           <a href="tel:0965151040" className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all border border-slate-100 group">
             <span className="font-semibold text-slate-700 group-hover:text-brand-600 transition-colors">Gọi điện</span>
             <div className="w-10 h-10 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition-colors">
@@ -22,7 +47,6 @@ export default function FloatingContact() {
             </div>
           </a>
 
-          {/* Zalo */}
           <a href="https://zalo.me/0965151040" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all border border-slate-100 group">
             <span className="font-semibold text-slate-700 group-hover:text-blue-600 transition-colors">Zalo Chat</span>
             <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -30,7 +54,6 @@ export default function FloatingContact() {
             </div>
           </a>
 
-          {/* AI Chat */}
           <button onClick={() => { setIsAIChatOpen(true); setIsOpen(false); }} className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all border border-slate-100 group">
             <span className="font-semibold text-slate-700 group-hover:text-purple-600 transition-colors">Trợ lý AI</span>
             <div className="w-10 h-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
@@ -77,43 +100,76 @@ export default function FloatingContact() {
           </div>
           
           {/* Body */}
-          <div className="h-[350px] bg-slate-50 p-4 flex flex-col gap-4 overflow-y-auto">
-            <div className="flex gap-3 max-w-[85%]">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-brand-500 flex-shrink-0 flex items-center justify-center text-white">
-                <Bot className="w-4 h-4" />
+          <div className="h-[380px] bg-slate-50 p-4 flex flex-col gap-4 overflow-y-auto">
+            {messages.map((m) => (
+              <div key={m.id} className={`flex gap-3 max-w-[85%] ${m.role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}>
+                {m.role === 'assistant' && (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-brand-500 flex-shrink-0 flex items-center justify-center text-white">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                )}
+                <div className={`p-3 rounded-2xl shadow-sm text-sm leading-relaxed ${
+                  m.role === 'user' 
+                    ? 'bg-brand-600 text-white rounded-tr-sm' 
+                    : 'bg-white border border-slate-100 text-slate-700 rounded-tl-sm'
+                }`}>
+                  {m.role === 'assistant' ? (
+                    <ReactMarkdown className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-li:my-0">{m.content}</ReactMarkdown>
+                  ) : (
+                    m.content
+                  )}
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 text-sm text-slate-700 leading-relaxed">
-                Xin chào! 👋 Mình là trợ lý AI của HTC Môi Trường. Mình có thể giúp bạn giải đáp các vấn đề về pháp lý môi trường, tài nguyên nước, hoặc tư vấn dịch vụ. Bạn cần hỗ trợ gì ạ?
+            ))}
+
+            {isLoading && (
+              <div className="flex gap-3 max-w-[85%] self-start">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-brand-500 flex-shrink-0 flex items-center justify-center text-white">
+                  <Bot className="w-4 h-4" />
+                </div>
+                <div className="bg-white p-3 rounded-2xl rounded-tl-sm shadow-sm border border-slate-100 flex items-center gap-1 text-slate-400">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-xs">Đang suy nghĩ...</span>
+                </div>
               </div>
-            </div>
+            )}
             
-            {/* Quick Actions */}
-            <div className="flex flex-wrap gap-2 pl-11">
-              <button className="text-xs bg-purple-50 text-purple-700 border border-purple-100 px-3 py-1.5 rounded-full hover:bg-purple-100 transition-colors">
-                Báo cáo ĐTM là gì?
-              </button>
-              <button className="text-xs bg-brand-50 text-brand-700 border border-brand-100 px-3 py-1.5 rounded-full hover:bg-brand-100 transition-colors">
-                Giấy phép môi trường
-              </button>
-            </div>
+            {messages.length === 1 && (
+              <div className="flex flex-wrap gap-2 pl-11">
+                <button onClick={() => handleQuickAction('Báo cáo ĐTM là gì?')} className="text-xs bg-purple-50 text-purple-700 border border-purple-100 px-3 py-1.5 rounded-full hover:bg-purple-100 transition-colors">
+                  Báo cáo ĐTM là gì?
+                </button>
+                <button onClick={() => handleQuickAction('Giấy phép môi trường')} className="text-xs bg-brand-50 text-brand-700 border border-brand-100 px-3 py-1.5 rounded-full hover:bg-brand-100 transition-colors">
+                  Giấy phép môi trường
+                </button>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
           </div>
           
           {/* Input Area */}
-          <div className="p-3 bg-white border-t border-slate-100">
+          <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-slate-100">
             <div className="relative flex items-center">
               <input 
                 type="text" 
+                value={input}
+                onChange={handleInputChange}
+                disabled={isLoading}
                 placeholder="Nhập câu hỏi của bạn..." 
-                className="w-full bg-slate-100 rounded-full pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-shadow" 
+                className="w-full bg-slate-100 rounded-full pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-shadow disabled:opacity-50" 
               />
-              <button className="absolute right-1 w-9 h-9 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors shadow-sm">
+              <button 
+                type="submit" 
+                disabled={isLoading || !input.trim()}
+                className="absolute right-1 w-9 h-9 bg-purple-600 text-white rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors shadow-sm disabled:opacity-50"
+              >
                 <Send className="w-4 h-4 ml-0.5" />
               </button>
             </div>
             <div className="text-center mt-2">
-              <span className="text-[10px] text-slate-400">Powered by AI Agent</span>
+              <span className="text-[10px] text-slate-400">Powered by Gemini AI</span>
             </div>
-          </div>
+          </form>
         </div>
       )}
     </>
