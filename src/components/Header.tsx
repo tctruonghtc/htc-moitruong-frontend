@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Leaf, Menu, X, Phone } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, Phone } from "lucide-react";
 
 const navItems = [
   { href: "/", label: "Trang chủ" },
@@ -18,9 +19,16 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glassmorphism">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <Leaf className="w-8 h-8 text-brand-600" />
-          <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-700 to-accent-600">
+        <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+          <Image
+            src="/logo-htc.png"
+            alt="Logo HTC Môi Trường"
+            width={40}
+            height={40}
+            priority
+            className="w-10 h-10 md:w-11 md:h-11 object-contain"
+          />
+          <span className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-700 to-accent-600">
             HTC Môi Trường
           </span>
         </Link>

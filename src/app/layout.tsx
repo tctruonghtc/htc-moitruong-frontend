@@ -13,6 +13,10 @@ export const metadata: Metadata = {
     template: "%s | HTC Môi Trường",
   },
   description: siteConfig.description,
+  icons: {
+    icon: "/favicon-32.png",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "vi_VN",
@@ -20,11 +24,20 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: "HTC Môi Trường | Giải pháp Tài nguyên & Môi trường",
     description: siteConfig.description,
+    images: [
+      {
+        url: "/logo-htc-512.png",
+        width: 512,
+        height: 512,
+        alt: "Logo HTC Môi Trường",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "HTC Môi Trường",
     description: siteConfig.description,
+    images: ["/logo-htc-512.png"],
   },
   alternates: {
     canonical: siteConfig.url,
